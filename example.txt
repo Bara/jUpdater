@@ -1,0 +1,28 @@
+"Updater"
+{
+    "Information"
+    {
+        "StringVersion" "1.0.0"
+        "IntVersion"    "100"
+        
+        "Changelogs"
+        {
+            "0" "More info @ www.sourcemod.net. Changes in 1.0.1:"
+            "1" "Added new Batman model"
+            "2" "Minor code changes"
+        }
+    }
+
+    "Settings"
+    {
+        "AutoUpdate"    "0"
+        [...]
+    }
+    
+    "Files"
+    {
+        "plugins"	"myplugin.smx"
+        "translations"	"myplugin.phrases.txt"
+        "translations"	"ru/myplugin.phrases.txt"
+    }
+}
