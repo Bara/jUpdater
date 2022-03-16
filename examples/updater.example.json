@@ -1,0 +1,33 @@
+{
+    "Informations": {
+        "StringVersion": "1.0.0",
+        "IntVersion": 100,
+
+        "Changelogs": [
+            "Initial version",
+            "How should design this",
+            "Hey"
+        ]
+    },
+
+    "Settings": {
+        "AutoUpdate": true,
+        "DiscordNotification": true
+    },
+
+    "Files": {
+        "plugins": [
+            "jupdater.smx"
+        ],
+
+        "translations": [
+            "jupdater.phrases.txt",
+            "de/jupdater.phrases.txt"
+        ],
+
+        "root": [
+            "materials/path/to/example.vtf",
+            "materials/path/to/example.vmt"
+        ]
+    }
+}
