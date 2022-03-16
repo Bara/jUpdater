@@ -4,13 +4,12 @@
 #define _jupdater_included
 
 /**
- * Register your plugin with the url which will be used for checking for updates.
- * You can replace the existing url by set replace to true, which is false by default.
+ * Register your plugin with the url which will be used for update checks.
  *
  * @return		True, plugin was successfully registered. Otherwise it's false.
  * @error		Plugin is already registered or plugin has no name.
  */
-native bool jUpdater_RegisterPlugin(const char[] url, bool replace = false);
+native bool jUpdater_RegisterPlugin(const char[] url);
 
 public SharedPlugin __pl_jupdater = 
 {

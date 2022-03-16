@@ -30,22 +30,6 @@ public void OnPluginStart()
 
 public any Native_RegisterPlugin(Handle plugin, int numParams)
 {
-    bool bReplace = view_as<bool>(GetNativeCell(2));
-    
-    if (!bReplace)
-    {
-        for (int i = 0; i < g_aPlugins.Length; i++)
-        {
-            PluginData tmp;
-            g_aPlugins.GetArray(i, tmp, sizeof(tmp));
-
-            if (tmp.Plugin == plugin)
-            {
-                return false;
-            }
-        }
-    }
-
     char sName[MAX_NAME_LENGTH];
     if (!GetPluginInfo(plugin, PlInfo_Name, sName, sizeof(sName)))
     {
