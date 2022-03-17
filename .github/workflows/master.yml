@@ -8,25 +8,25 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        sm_version: [ "1.10", "1.11" ]
-
+        SM_VERSION: [ "1.10", "1.11" ]
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - name: Set environment variables
         run: |
-          SOURCEMOD_PATH=$GITHUB_WORKSPACE/addons/sourcemod
-          echo ::set-env name=SOURCEMOD_PATH::$SOURCEMOD_PATH
-          echo ::set-env name=SCRIPTS_PATH::$SOURCEMOD_PATH/scripting
+          echo "SCRIPTING_PATH=addons/sourcemod/scripting" >> $GITHUB_ENV
 
       - name: Setup SourcePawn Compiler ${{ matrix.SM_VERSION }}
         uses: rumblefrog/setup-sp@master
         with:
           version: ${{ matrix.SM_VERSION }}
 
-      - name: Compile plugin
+      - name: Compile plugins
         run: |
-          echo -e "\nCompiling jupdater.sp..."
-          spcomp -E -w234 -O2 -v2 -i $SCRIPTS_PATH/include jupdater.sp
-        working-directory: ${{ env.SCRIPTS_PATH }}/
+          for file in jupdater*.sp
+          do
+            echo -e "\nCompiling $file..."
+            spcomp -E -w234 -O2 -v2 -i $includePath -i include $file
+          done
+        working-directory: ${{ env.SCRIPTING_PATH }}
