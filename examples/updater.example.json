@@ -1,7 +1,6 @@
 {
     "Informations": {
-        "StringVersion": "1.0.0",
-        "IntVersion": 100,
+        "Version": "1.0.0",
 
         "Changelogs": [
             "Initial version",
