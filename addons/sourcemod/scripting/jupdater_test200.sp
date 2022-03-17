@@ -17,13 +17,5 @@ public void OnPluginEnd()
 
 public void OnAllPluginsLoaded()
 {
-    AddToUpdater();
-}
-
-void AddToUpdater()
-{
-    if (!jUpdater_RegisterPlugin("https://raw.githubusercontent.com/Bara/jUpdater/main/examples/updater.example.json"))
-    {
-        SetFailState("Noooooo.....");
-    }
+    jUpdater_RegisterPlugin("https://raw.githubusercontent.com/Bara/jUpdater/main/examples/updater.example.json");
 }
