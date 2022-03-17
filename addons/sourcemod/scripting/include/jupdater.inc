@@ -10,6 +10,13 @@
  */
 native bool jUpdater_RegisterPlugin(const char[] url);
 
+/**
+ * Unregister your plugin for update checks.
+ *
+ * @return		true - successfully registered, otherwise false
+ */
+native bool jUpdater_UnregisterPlugin();
+
 public SharedPlugin __pl_jupdater = 
 {
     name = "jupdater",
@@ -25,5 +32,6 @@ public SharedPlugin __pl_jupdater =
 public void __pl_jupdater_SetNTVOptional()
 {
     MarkNativeAsOptional("jUpdater_RegisterPlugin");
+    MarkNativeAsOptional("jUpdater_UnregisterPlugin");
 }
 #endif
