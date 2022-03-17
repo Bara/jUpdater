@@ -15,7 +15,7 @@ public void OnPluginEnd()
     jUpdater_UnregisterPlugin();
 }
 
-public void OnConfigsExecuted()
+public void OnAllPluginsLoaded()
 {
     AddToUpdater();
 }
