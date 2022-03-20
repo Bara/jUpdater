@@ -16,6 +16,9 @@
     },
 
     "Files": {
+        "__README_": "plugins, translations are the folders of addons/sourcemod, so you don't need to add the folders.",
+        "__README__": "root is the server base folders where you should have the addons, cfg, ... folders.",
+
         "plugins": [
             "jupdater.smx"
         ],
