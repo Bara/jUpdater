@@ -12,7 +12,7 @@
     "Settings": {
         "AutoUpdate": true,
         "LogUpdate": true,
-        "DiscordNotification": true
+        "DiscordNotification": false
     },
 
     "Files": {
