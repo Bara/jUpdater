@@ -43,6 +43,7 @@ public void GetPluginInformations(HTTPResponse response, Handle plugin, const ch
     }
 
     JSONObject jInfos = view_as<JSONObject>((view_as<JSONObject>(response.Data).Get("Informations")));
+    JSONObject jSettings = view_as<JSONObject>((view_as<JSONObject>(response.Data).Get("Settings")));
 
     char sVersion[MAX_VERSION_LENGTH];
     jInfos.GetString("Version", sVersion, sizeof(sVersion));
@@ -56,30 +57,58 @@ public void GetPluginInformations(HTTPResponse response, Handle plugin, const ch
     
     bool bOkay = (iLocalVersion >= iOnlineVersion) ? true : false;
 
-    PrintToServer("Plugin: %s, LocalVersion: %s, OnlineVersion: %s, Status: %s", pdPlugin.Name, pdPlugin.Version, sVersion, (bOkay) ? "Up2date" : "Outdated, Changelogs:");
+    if (bOkay)
+    {
+        PrintToServer("Plugin: %s, LocalVersion: %s, OnlineVersion: %s", pdPlugin.Name, pdPlugin.Version, sVersion);
+    }
 
     if (!bOkay)
     {
         JSONArray jChanges = view_as<JSONArray>(jInfos.Get("Changelogs"));
 
         char sChange[64];
+        char sChangelogs[512];
         for (int i = 0; i < jChanges.Length; i++)
         {
             jChanges.GetString(i, sChange, sizeof(sChange));
-            PrintToServer(" [%d] %s", i + 1, sChange);
+            Format(sChangelogs, sizeof(sChangelogs), "%s [%d] %s\n", sChangelogs, i + 1, sChange);
             sChange[0] = '\0';
         }
 
         delete jChanges;
+
+        bool bLogUpdate = GetObjectBool(jSettings, "LogUpdate");
+        bool bDiscord = GetObjectBool(jSettings, "DiscordNotification");
+
+        if (bLogUpdate)
+        {
+            LogMessage("Update for %s from version %s to %s is available! Changelogs:\n%s", pdPlugin.Name, pdPlugin.Version, sVersion, sChangelogs);
+        }
+
+        if (bDiscord)
+        {
+            PostDiscordNotification(pdPlugin.Name, pdPlugin.Version, sVersion, sChangelogs);
+        }
     }
 
     PrintToServer(" "); // TODO In debug mode?
 
     delete jInfos;
+    delete jSettings;
 }
 
 int GetIntVersion(char[] version, int size)
 {
     ReplaceString(version, size, ".", "", false);
     return StringToInt(version);
+}
+
+bool GetObjectBool(JSONObject obj, const char[] key)
+{
+    if (obj.HasKey(key))
+    {
+        return obj.GetBool(key);
+    }
+
+    return false;
 }

@@ -2,13 +2,16 @@
 #pragma semicolon 1
 
 #include <sourcemod>
+#include <autoexecconfig>
 #include <ripext>
+#include <discordWebhookAPI>
 
 #define MAX_URL_LENGTH 512
 #define MAX_VERSION_LENGTH 32
 
 enum struct Globals {
     ConVar Interval;
+    ConVar DiscordWebhook;
 }
 
 Globals Core;
@@ -26,6 +29,7 @@ ArrayList g_aPlugins = null;
 
 #include "jupdater/api.sp"
 #include "jupdater/check.sp"
+#include "jupdater/discord.sp"
 
 public Plugin myinfo =
 {
@@ -38,7 +42,13 @@ public Plugin myinfo =
 
 public void OnPluginStart()
 {
-    Core.Interval = CreateConVar("jupdater_check_interval", "10", "Interval in seconds for checking for plugin updates.");
+    AutoExecConfig_SetCreateDirectory(true);
+    AutoExecConfig_SetCreateFile(true);
+    AutoExecConfig_SetFile("jupdater");
+    Core.Interval = AutoExecConfig_CreateConVar("jupdater_check_interval", "10", "Interval in seconds for checking for plugin updates.");
+    Core.DiscordWebhook = AutoExecConfig_CreateConVar("jupdater_discord_webhook", "", "Set your discord webhook url if you want update notifications on discord", _, true, 0.0, true, 1.0);
+    AutoExecConfig_ExecuteFile();
+    AutoExecConfig_CleanFile();
 
     g_aPlugins = new ArrayList(sizeof(PluginData));
 
