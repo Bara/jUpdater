@@ -10,7 +10,8 @@
     },
 
     "Settings": {
-        "AutoUpdate": true,
+        "UpdateFiles": true,
+        "ReloadPlugin": true,
         "LogUpdate": true,
         "DiscordNotification": true
     },
