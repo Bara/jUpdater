@@ -1,3 +1,8 @@
+/*
+    TODO 
+        Debug messages (atm some PrintToServer)
+*/
+
 #pragma newdecls required
 #pragma semicolon 1
 
@@ -22,6 +27,7 @@ enum struct PluginData {
     char Name[MAX_NAME_LENGTH];
     char Version[MAX_VERSION_LENGTH];
     char URL[MAX_URL_LENGTH];
+    char BaseURL[MAX_URL_LENGTH];
     char FileName[PLATFORM_MAX_PATH];
 }
 
@@ -73,7 +79,7 @@ public Action Command_ListPlugins(int client, int args)
     {
         PluginData tmp;
         g_aPlugins.GetArray(i, tmp, sizeof(tmp));
-        ReplyToCommand(client, "Plugin: %s, Version: %s, File: %s, URL: %s", tmp.Name, tmp.Version, tmp.FileName, tmp.URL);
+        ReplyToCommand(client, "Plugin: %s, Version: %s, File: %s, URL: %s, BaseURL: %s", tmp.Name, tmp.Version, tmp.FileName, tmp.URL, tmp.BaseURL);
     }
 
     return Plugin_Handled;

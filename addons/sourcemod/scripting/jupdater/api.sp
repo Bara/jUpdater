@@ -30,6 +30,7 @@ public any Native_RegisterPlugin(Handle plugin, int numParams)
     strcopy(pdPlugin.Version, sizeof(PluginData::Version), sVersion);
     GetPluginFilename(plugin, pdPlugin.FileName, sizeof(PluginData::FileName));
     GetNativeString(1, pdPlugin.URL, sizeof(PluginData::URL));
+    GetNativeString(2, pdPlugin.BaseURL, sizeof(PluginData::BaseURL));
 
     int index = g_aPlugins.PushArray(pdPlugin, sizeof(pdPlugin));
     PrintToServer("Plugin \"%s\" (%d) was successfully registered.", pdPlugin.Name, index);

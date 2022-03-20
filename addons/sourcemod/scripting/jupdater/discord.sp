@@ -1,6 +1,6 @@
 void PostDiscordNotification(const char[] name, const char[] localVersion, const char[] onlineVersion, const char[] changeLogs)
 {
-    char sWebhook[256];
+    char sWebhook[MAX_URL_LENGTH];
     Core.DiscordWebhook.GetString(sWebhook, sizeof(sWebhook));
 
     if (strlen(sWebhook) < 1)

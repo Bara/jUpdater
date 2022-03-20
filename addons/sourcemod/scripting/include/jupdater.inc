@@ -5,10 +5,11 @@
 
 /**
  * Register your plugin with the url which will be used for update checks.
+ * Base URL is the absolute url to the directory where are the update files located.
  *
  * @return		true - successfully registered, otherwise false
  */
-native bool jUpdater_RegisterPlugin(const char[] url);
+native bool jUpdater_RegisterPlugin(const char[] url, const char[] baseURL);
 
 /**
  * Unregister your plugin for update checks.
