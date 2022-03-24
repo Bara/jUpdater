@@ -69,6 +69,13 @@ public void GetPluginInformations(HTTPResponse response, Handle plugin, const ch
 
     if (!bOkay)
     {
+        bool bReload = GetObjectBool(jSettings, "ReloadPlugin");
+
+        if (bReload)
+        {
+            ServerCommand("sm plugins unload %s", pdPlugin.FileName);
+        }
+
         JSONArray jChanges = view_as<JSONArray>(jInfos.Get("Changelogs"));
 
         char sChange[64];
@@ -117,6 +124,9 @@ public void GetPluginInformations(HTTPResponse response, Handle plugin, const ch
 
                     DataPack pack = new DataPack();
                     pack.WriteString(sPath);
+                    pack.WriteCell(view_as<int>(bReload));
+                    pack.WriteCell(view_as<int>(GetObjectBool(jSettings, "ReloadNewPlugins")));
+                    pack.WriteString(pdPlugin.FileName);
 
                     HTTPRequest request = new HTTPRequest(sURL);
                     request.DownloadFile(sPath, OnFileDownloaded, pack);
@@ -127,8 +137,6 @@ public void GetPluginInformations(HTTPResponse response, Handle plugin, const ch
                 delete jFile;
             }
             delete jDirectories;
-
-            bool bReload = GetObjectBool(jSettings, "ReloadPlugin");
         }
 
         if (GetObjectBool(jSettings, "LogUpdate"))
@@ -154,8 +162,16 @@ public void GetPluginInformations(HTTPResponse response, Handle plugin, const ch
 public void OnFileDownloaded(HTTPStatus status, DataPack pack, const char[] error)
 {
     pack.Reset();
+
     char sPath[PLATFORM_MAX_PATH];
     pack.ReadString(sPath, sizeof(sPath));
+
+    bool bReload = view_as<bool>(pack.ReadCell());
+    bool bReloadNew = view_as<bool>(pack.ReadCell());
+
+    char sFileName[PLATFORM_MAX_PATH];
+    pack.ReadString(sFileName, sizeof(sFileName));
+
     delete pack;
 
     if (status != HTTPStatus_OK)
@@ -166,16 +182,24 @@ public void OnFileDownloaded(HTTPStatus status, DataPack pack, const char[] erro
 
     PrintToServer("File \"%s\" downloaded!", sPath);
 
-    bool bPlugin = false;
-
-    if (StrContains(sPath, ".smx", false) != -1)
+    if (bReload && StrContains(sPath, ".smx", false) != -1)
     {
-        bPlugin = true;
-    }
+        if (Core.Debug.BoolValue)
+        {
+            PrintToServer("smx-File found.");
+        }
 
-    if (Core.Debug.BoolValue)
-    {
-        PrintToServer("smx-File? %d", bPlugin);
+        if (StrContains(sPath, sFileName, false) != -1)
+        {
+            ServerCommand("sm plugins load %s", sFileName);
+        }
+        else if (bReloadNew)
+        {
+            ReplaceString(sPath, sizeof(sPath), "addons/sourcemod/plugins/", "", false);
+            ReplaceString(sPath, sizeof(sPath), ".smx", "", false);
+
+            ServerCommand("sm plugins load %s", sPath);
+        }
     }
 }
 

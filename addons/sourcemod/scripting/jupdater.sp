@@ -1,6 +1,7 @@
 /*
     TODO List
-        Detect smx files and load it (shouldn't match the original filename)
+        Reload plugin
+            Detect smx files and load it (shouldn't match the original filename)
 */
 
 #pragma newdecls required
@@ -29,7 +30,9 @@ enum struct PluginData {
     char Version[MAX_VERSION_LENGTH];
     char URL[MAX_URL_LENGTH];
     char BaseURL[MAX_URL_LENGTH];
-    char FileName[PLATFORM_MAX_PATH];
+    char FileName[
+        
+    ];
 }
 
 ArrayList g_aPlugins = null;

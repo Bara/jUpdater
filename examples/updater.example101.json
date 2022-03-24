@@ -12,6 +12,7 @@
     "Settings": {
         "UpdateFiles": true,
         "ReloadPlugin": true,
+        "ReloadNewPlugins": true,
         "LogUpdate": true,
         "DiscordNotification": true
     },
