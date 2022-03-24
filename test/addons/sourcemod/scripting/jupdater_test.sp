@@ -6,7 +6,7 @@ public Plugin myinfo =
     name = "Test Plugin",
     author = "Bara",
     description = "",
-    version = "1.0.1",
+    version = "1.0.2",
     url = "https://bara.dev"
 };
 

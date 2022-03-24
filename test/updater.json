@@ -1,9 +1,11 @@
 {
     "Informations": {
-        "Version": "1.0.1",
+        "Version": "1.0.2",
 
         "Changelogs": [
-            "Test Update"
+            "2",
+            "Update",
+            "2"
         ]
     },
 
