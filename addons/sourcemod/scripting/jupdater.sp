@@ -1,6 +1,5 @@
 /*
     TODO List
-        Debug messages (atm some PrintToServer)
         Detect smx files and load it (shouldn't match the original filename)
 */
 
@@ -18,6 +17,7 @@
 enum struct Globals {
     ConVar Interval;
     ConVar DiscordWebhook;
+    ConVar Debug;
 }
 
 Globals Core;
@@ -54,6 +54,7 @@ public void OnPluginStart()
     AutoExecConfig_SetFile("jupdater");
     Core.Interval = AutoExecConfig_CreateConVar("jupdater_check_interval", "10", "Interval in seconds for checking for plugin updates.");
     Core.DiscordWebhook = AutoExecConfig_CreateConVar("jupdater_discord_webhook", "", "Set your discord webhook url if you want update notifications on discord", _, true, 0.0, true, 1.0);
+    Core.Debug = AutoExecConfig_CreateConVar("jupdater_debug", "1", "Enable/Disable debug mode/messages", _, true, 0.0, true, 1.0);
     AutoExecConfig_ExecuteFile();
     AutoExecConfig_CleanFile();
 

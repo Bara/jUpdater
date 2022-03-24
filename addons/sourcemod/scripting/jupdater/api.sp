@@ -33,7 +33,10 @@ public any Native_RegisterPlugin(Handle plugin, int numParams)
     GetNativeString(2, pdPlugin.BaseURL, sizeof(PluginData::BaseURL));
 
     int index = g_aPlugins.PushArray(pdPlugin, sizeof(pdPlugin));
-    PrintToServer("Plugin \"%s\" (%d) was successfully registered.", pdPlugin.Name, index);
+    if (Core.Debug.BoolValue)
+    {
+        PrintToServer("Plugin \"%s\" (%d) was successfully registered.", pdPlugin.Name, index);
+    }
 
     // TODO Trigger update check
 

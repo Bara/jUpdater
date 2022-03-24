@@ -1,6 +1,6 @@
 public Action Timer_CheckForUpdates(Handle timer)
 {
-    if (g_aPlugins.Length == 0)
+    if (Core.Debug.BoolValue && g_aPlugins.Length == 0)
     {
         PrintToServer("No plugins found to check for updates.");
         return Plugin_Continue;
@@ -38,7 +38,11 @@ public void GetPluginInformations(HTTPResponse response, Handle plugin, const ch
     {
         LogError("Error while checking for plugin updates. (Plugin: \"%s\", Error Code: %d)", pdPlugin.Name, response.Status);
 
-        PrintToServer(" "); // TODO In debug mode?
+        if (Core.Debug.BoolValue)
+        {
+            PrintToServer(" ");
+        }
+
         return;
     }
 
@@ -58,7 +62,7 @@ public void GetPluginInformations(HTTPResponse response, Handle plugin, const ch
     
     bool bOkay = (iLocalVersion >= iOnlineVersion) ? true : false;
 
-    if (bOkay)
+    if (Core.Debug.BoolValue && bOkay)
     {
         PrintToServer("Plugin: %s, LocalVersion: %s, OnlineVersion: %s", pdPlugin.Name, pdPlugin.Version, sVersion);
     }
@@ -104,7 +108,10 @@ public void GetPluginInformations(HTTPResponse response, Handle plugin, const ch
                     }
 
                     Format(sURL, sizeof(sURL), "%s/%s", pdPlugin.BaseURL, sPath);
-                    PrintToServer("URL: %s", sURL);
+                    if (Core.Debug.BoolValue)
+                    {
+                        PrintToServer("URL: %s", sURL);
+                    }
 
                     CreateDirectories(sPath);
 
@@ -135,7 +142,10 @@ public void GetPluginInformations(HTTPResponse response, Handle plugin, const ch
         }
     }
 
-    PrintToServer(" "); // TODO In debug mode?
+    if (Core.Debug.BoolValue)
+    {
+        PrintToServer(" ");
+    }
 
     delete jInfos;
     delete jSettings;
@@ -152,6 +162,20 @@ public void OnFileDownloaded(HTTPStatus status, DataPack pack, const char[] erro
     {
         LogError("Can't download file \"%s\".", sPath);
         return;
+    }
+
+    PrintToServer("File \"%s\" downloaded!", sPath);
+
+    bool bPlugin = false;
+
+    if (StrContains(sPath, ".smx", false) != -1)
+    {
+        bPlugin = true;
+    }
+
+    if (Core.Debug.BoolValue)
+    {
+        PrintToServer("smx-File? %d", bPlugin);
     }
 }
 
@@ -185,14 +209,16 @@ void CreateDirectories(const char[] path)
     {
         FormatEx(sDirectory, sizeof(sDirectory), "%s%s%s", sDirectory, (i > 0) ? "/" : "", sDirectories[i]);
 
-        PrintToServer(sDirectory);
-
         if (DirExists(sDirectory))
         {
             continue;
         }
 
         CreateDirectory(sDirectory, FPERM_U_READ|FPERM_U_WRITE|FPERM_U_EXEC|FPERM_G_READ|FPERM_G_EXEC|FPERM_O_READ|FPERM_O_EXEC);
-        PrintToServer("Directory \"%s\" created.", sDirectory);
+
+        if (Core.Debug.BoolValue)
+        {
+            PrintToServer("Directory \"%s\" created.", sDirectory);
+        }
     }
 }
