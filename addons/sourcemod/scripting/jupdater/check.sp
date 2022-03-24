@@ -69,13 +69,6 @@ public void GetPluginInformations(HTTPResponse response, Handle plugin, const ch
 
     if (!bOkay)
     {
-        bool bReload = GetObjectBool(jSettings, "ReloadPlugin");
-
-        if (bReload)
-        {
-            ServerCommand("sm plugins unload %s", pdPlugin.FileName);
-        }
-
         JSONArray jChanges = view_as<JSONArray>(jInfos.Get("Changelogs"));
 
         char sChange[64];
@@ -124,7 +117,7 @@ public void GetPluginInformations(HTTPResponse response, Handle plugin, const ch
 
                     DataPack pack = new DataPack();
                     pack.WriteString(sPath);
-                    pack.WriteCell(view_as<int>(bReload));
+                    pack.WriteCell(view_as<int>(GetObjectBool(jSettings, "ReloadPlugin")));
                     pack.WriteCell(view_as<int>(GetObjectBool(jSettings, "ReloadNewPlugins")));
                     pack.WriteString(pdPlugin.FileName);
 
@@ -191,7 +184,7 @@ public void OnFileDownloaded(HTTPStatus status, DataPack pack, const char[] erro
 
         if (StrContains(sPath, sFileName, false) != -1)
         {
-            ServerCommand("sm plugins load %s", sFileName);
+            ServerCommand("sm plugins reload %s", sFileName);
         }
         else if (bReloadNew)
         {

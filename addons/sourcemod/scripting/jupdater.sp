@@ -30,9 +30,7 @@ enum struct PluginData {
     char Version[MAX_VERSION_LENGTH];
     char URL[MAX_URL_LENGTH];
     char BaseURL[MAX_URL_LENGTH];
-    char FileName[
-        
-    ];
+    char FileName[PLATFORM_MAX_PATH];
 }
 
 ArrayList g_aPlugins = null;
