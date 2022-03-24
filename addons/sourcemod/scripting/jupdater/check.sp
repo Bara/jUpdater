@@ -44,6 +44,7 @@ public void GetPluginInformations(HTTPResponse response, Handle plugin, const ch
 
     JSONObject jInfos = view_as<JSONObject>((view_as<JSONObject>(response.Data).Get("Informations")));
     JSONObject jSettings = view_as<JSONObject>((view_as<JSONObject>(response.Data).Get("Settings")));
+    JSONObject jFiles = view_as<JSONObject>((view_as<JSONObject>(response.Data).Get("Files")));
 
     char sVersion[MAX_VERSION_LENGTH];
     jInfos.GetString("Version", sVersion, sizeof(sVersion));
@@ -77,15 +78,58 @@ public void GetPluginInformations(HTTPResponse response, Handle plugin, const ch
 
         delete jChanges;
 
-        bool bLogUpdate = GetObjectBool(jSettings, "LogUpdate");
-        bool bDiscord = GetObjectBool(jSettings, "DiscordNotification");
+        if (GetObjectBool(jSettings, "UpdateFiles") && jFiles.Size > 0)
+        {
+            JSONObjectKeys jDirectories = jFiles.Keys();
 
-        if (bLogUpdate)
+            char sDirectory[32];
+            char sFile[PLATFORM_MAX_PATH];
+            char sPath[PLATFORM_MAX_PATH];
+            char sURL[MAX_URL_LENGTH];
+            while (jDirectories.ReadKey(sDirectory, sizeof(sDirectory)))
+            {
+                JSONArray jFile = view_as<JSONArray>(jFiles.Get(sDirectory));
+
+                for (int i = 0; i < jFile.Length; i++)
+                {
+                    jFile.GetString(i, sFile, sizeof(sFile));
+
+                    if (sDirectory[0] != 'r')
+                    {
+                        BuildPath(Path_SM, sPath, sizeof(sPath), "%s/%s", sDirectory, sFile);
+                    }
+                    else
+                    {
+                        FormatEx(sPath, sizeof(sPath), "%s", sFile);
+                    }
+
+                    Format(sURL, sizeof(sURL), "%s/%s", pdPlugin.BaseURL, sPath);
+                    PrintToServer("URL: %s", sURL);
+
+                    CreateDirectories(sPath);
+
+                    DataPack pack = new DataPack();
+                    pack.WriteString(sPath);
+
+                    HTTPRequest request = new HTTPRequest(sURL);
+                    request.DownloadFile(sPath, OnFileDownloaded, pack);
+
+                    sFile[0] = '\0';
+                }
+
+                delete jFile;
+            }
+            delete jDirectories;
+
+            bool bReload = GetObjectBool(jSettings, "ReloadPlugin");
+        }
+
+        if (GetObjectBool(jSettings, "LogUpdate"))
         {
             LogMessage("Update for %s from version %s to %s is available! Changelogs:\n%s", pdPlugin.Name, pdPlugin.Version, sVersion, sChangelogs);
         }
 
-        if (bDiscord)
+        if (GetObjectBool(jSettings, "DiscordNotification"))
         {
             PostDiscordNotification(pdPlugin.Name, pdPlugin.Version, sVersion, sChangelogs);
         }
@@ -95,6 +139,20 @@ public void GetPluginInformations(HTTPResponse response, Handle plugin, const ch
 
     delete jInfos;
     delete jSettings;
+}
+
+public void OnFileDownloaded(HTTPStatus status, DataPack pack, const char[] error)
+{
+    pack.Reset();
+    char sPath[PLATFORM_MAX_PATH];
+    pack.ReadString(sPath, sizeof(sPath));
+    delete pack;
+
+    if (status != HTTPStatus_OK)
+    {
+        LogError("Can't download file \"%s\".", sPath);
+        return;
+    }
 }
 
 int GetIntVersion(char[] version, int size)
@@ -111,4 +169,30 @@ bool GetObjectBool(JSONObject obj, const char[] key)
     }
 
     return false;
+}
+
+void CreateDirectories(const char[] path)
+{
+    char sDirectories[32][PLATFORM_MAX_PATH];
+    char sDirectory[PLATFORM_MAX_PATH];
+
+    int iNumDirectories = ExplodeString(path, "/", sDirectories, sizeof(sDirectories), sizeof(sDirectories[]));
+
+    // Remove file.extension
+    iNumDirectories -= 1;
+
+    for (int i = 0; i < iNumDirectories; i++)
+    {
+        FormatEx(sDirectory, sizeof(sDirectory), "%s%s%s", sDirectory, (i > 0) ? "/" : "", sDirectories[i]);
+
+        PrintToServer(sDirectory);
+
+        if (DirExists(sDirectory))
+        {
+            continue;
+        }
+
+        CreateDirectory(sDirectory, FPERM_U_READ|FPERM_U_WRITE|FPERM_U_EXEC|FPERM_G_READ|FPERM_G_EXEC|FPERM_O_READ|FPERM_O_EXEC);
+        PrintToServer("Directory \"%s\" created.", sDirectory);
+    }
 }
