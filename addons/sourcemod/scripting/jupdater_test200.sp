@@ -17,5 +17,5 @@ public void OnPluginEnd()
 
 public void OnAllPluginsLoaded()
 {
-    jUpdater_RegisterPlugin("https://raw.githubusercontent.com/Bara/jUpdater/main/examples/updater.example.json", "https://raw.githubusercontent.com/Bara/jUpdater/main/");
+    jUpdater_RegisterPlugin("https://raw.githubusercontent.com/Bara/jUpdater/main/examples/updater.example.json", "https://raw.githubusercontent.com/Bara/jUpdater/main");
 }
