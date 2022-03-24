@@ -1,9 +1,3 @@
-/*
-    TODO List
-        Reload plugin
-            Detect smx files and load it (shouldn't match the original filename)
-*/
-
 #pragma newdecls required
 #pragma semicolon 1
 
