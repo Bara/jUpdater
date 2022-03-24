@@ -3,10 +3,10 @@
 
 public Plugin myinfo =
 {
-    name = "jUpdater - Test200",
+    name = "Test Plugin",
     author = "Bara",
     description = "",
-    version = "1.0.0",
+    version = "1.0.1",
     url = "https://bara.dev"
 };
 
@@ -17,5 +17,5 @@ public void OnPluginEnd()
 
 public void OnAllPluginsLoaded()
 {
-    jUpdater_RegisterPlugin("https://raw.githubusercontent.com/Bara/jUpdater/main/examples/updater.example.json", "https://raw.githubusercontent.com/Bara/jUpdater/main");
+    jUpdater_RegisterPlugin("https://raw.githubusercontent.com/Bara/jUpdater/main/test/updater.json", "https://raw.githubusercontent.com/Bara/jUpdater/main/test");
 }

@@ -1,0 +1,23 @@
+{
+    "Informations": {
+        "Version": "1.0.1",
+
+        "Changelogs": [
+            "Test Update"
+        ]
+    },
+
+    "Settings": {
+        "UpdateFiles": true,
+        "ReloadPlugin": true,
+        "ReloadNewPlugins": true,
+        "LogUpdate": true,
+        "DiscordNotification": true
+    },
+
+    "Files": {
+        "plugins": [
+            "jupdater_test.smx"
+        ]
+    }
+}
