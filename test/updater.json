@@ -1,6 +1,6 @@
 {
     "Informations": {
-        "Version": "1.0.2",
+        "Version": "1.0.3",
 
         "Changelogs": [
             "2",
@@ -19,7 +19,8 @@
 
     "Files": {
         "plugins": [
-            "jupdater_test.smx"
+            "jupdater_test.smx",
+            "jupdater_2test.smx"
         ]
     }
 }
