@@ -6,6 +6,11 @@
 #include <ripext>
 #include <discordWebhookAPI>
 
+#define UPDATER_NAME "jUpdater"
+#define UPDATER_VERSION "1.0.0"
+#define UPDATER_URL "https://raw.githubusercontent.com/Bara/jUpdater/main/updater.json"
+#define UPDATER_BASEURL "https://raw.githubusercontent.com/Bara/jUpdater/main"
+
 #define MAX_URL_LENGTH 512
 #define MAX_VERSION_LENGTH 32
 
@@ -15,6 +20,7 @@ enum struct Globals {
     ConVar Debug;
 
     bool LateLoad;
+    Handle MySelf;
 
     GlobalForward OnPluginReady;
 }
@@ -39,10 +45,10 @@ ArrayList g_aPlugins = null;
 
 public Plugin myinfo =
 {
-    name = "jUpdater",
+    name = UPDATER_NAME,
     author = "Bara",
     description = "New plugin updater from scratch which use ripext and json.",
-    version = "1.0.0",
+    version = UPDATER_VERSION,
     url = "https://bara.dev"
 };
 
@@ -58,6 +64,7 @@ public void OnPluginStart()
     AutoExecConfig_CleanFile();
 
     g_aPlugins = new ArrayList(sizeof(PluginData));
+    AddMySelfToArray();
 
     RegAdminCmd("sm_listplugins", Command_ListPlugins, ADMFLAG_ROOT);
 }
@@ -68,7 +75,6 @@ public void OnAllPluginsLoaded()
     {
         Call_StartForward(Core.OnPluginReady);
         Call_Finish();
-        PrintToServer("Call");
     }
 }
 
@@ -94,4 +100,17 @@ public Action Command_ListPlugins(int client, int args)
     }
 
     return Plugin_Handled;
+}
+
+void AddMySelfToArray()
+{
+    PluginData pdPlugin;
+    pdPlugin.Plugin = Core.MySelf;
+    strcopy(pdPlugin.Name, sizeof(PluginData::Name), UPDATER_NAME);
+    strcopy(pdPlugin.Version, sizeof(PluginData::Version), UPDATER_VERSION);
+    strcopy(pdPlugin.URL, sizeof(PluginData::URL), UPDATER_URL);
+    strcopy(pdPlugin.BaseURL, sizeof(PluginData::BaseURL), UPDATER_BASEURL);
+    GetPluginFilename(Core.MySelf, pdPlugin.FileName, sizeof(PluginData::FileName));
+
+    AddPluginToArray(pdPlugin);
 }

@@ -6,6 +6,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
     CreateNative("jUpdater_UnregisterPlugin", Native_UnregisterPlugin);
 
     Core.LateLoad = late;
+    Core.MySelf = myself;
 
     Core.OnPluginReady = new GlobalForward("jUpdater_OnPluginReady", ET_Ignore);
 
@@ -36,15 +37,18 @@ public any Native_RegisterPlugin(Handle plugin, int numParams)
     GetNativeString(1, pdPlugin.URL, sizeof(PluginData::URL));
     GetNativeString(2, pdPlugin.BaseURL, sizeof(PluginData::BaseURL));
 
+    AddPluginToArray(pdPlugin);
+
+    return true;
+}
+
+void AddPluginToArray(PluginData pdPlugin)
+{
     int index = g_aPlugins.PushArray(pdPlugin, sizeof(pdPlugin));
     if (Core.Debug.BoolValue)
     {
         PrintToServer("Plugin \"%s\" (%d) was successfully registered.", pdPlugin.Name, index);
     }
-
-    // TODO Trigger update check
-
-    return true;
 }
 
 public any Native_UnregisterPlugin(Handle plugin, int numParams)
