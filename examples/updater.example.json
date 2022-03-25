@@ -1,10 +1,11 @@
 {
     "Informations": {
+        "_README_": "Semantic versioning ( https://semver.org/ ) is recommended and tested. ",
         "Version": "1.0.1",
 
         "Changelogs": [
             "Initial version",
-            "How should design this",
+            "How we should design this",
             "Hey"
         ]
     },
