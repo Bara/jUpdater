@@ -38,11 +38,6 @@ public void GetPluginInformations(HTTPResponse response, Handle plugin, const ch
     {
         LogError("Error while checking for plugin updates. (Plugin: \"%s\", Error Code: %d)", pdPlugin.Name, response.Status);
 
-        if (Core.Debug.BoolValue)
-        {
-            PrintToServer(" ");
-        }
-
         return;
     }
 
@@ -143,11 +138,6 @@ public void GetPluginInformations(HTTPResponse response, Handle plugin, const ch
         }
     }
 
-    if (Core.Debug.BoolValue)
-    {
-        PrintToServer(" ");
-    }
-
     delete jInfos;
     delete jSettings;
 }
@@ -173,7 +163,10 @@ public void OnFileDownloaded(HTTPStatus status, DataPack pack, const char[] erro
         return;
     }
 
-    PrintToServer("File \"%s\" downloaded!", sPath);
+    if (Core.Debug.BoolValue)
+    {
+        PrintToServer("File \"%s\" downloaded!", sPath);
+    }
 
     if (bReload && StrContains(sPath, ".smx", false) != -1)
     {
