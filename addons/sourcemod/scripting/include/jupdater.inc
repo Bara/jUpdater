@@ -4,6 +4,11 @@
 #define _jupdater_included
 
 /**
+ * This forward will called when jUpdater was reloaded due manually update or due an self update.
+ */
+forward void jUpdater_OnPluginReady();
+
+/**
  * Register your plugin with the url which will be used for update checks.
  * Base URL is the absolute url to the directory where are the update files located (without(!) ending slash).
  *

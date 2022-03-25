@@ -5,6 +5,10 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
     CreateNative("jUpdater_RegisterPlugin", Native_RegisterPlugin);
     CreateNative("jUpdater_UnregisterPlugin", Native_UnregisterPlugin);
 
+    Core.LateLoad = late;
+
+    Core.OnPluginReady = new GlobalForward("jUpdater_OnPluginReady", ET_Ignore);
+
     return APLRes_Success;
 }
 

@@ -13,6 +13,10 @@ enum struct Globals {
     ConVar Interval;
     ConVar DiscordWebhook;
     ConVar Debug;
+
+    bool LateLoad;
+
+    GlobalForward OnPluginReady;
 }
 
 Globals Core;
@@ -56,6 +60,16 @@ public void OnPluginStart()
     g_aPlugins = new ArrayList(sizeof(PluginData));
 
     RegAdminCmd("sm_listplugins", Command_ListPlugins, ADMFLAG_ROOT);
+}
+
+public void OnAllPluginsLoaded()
+{
+    if (Core.LateLoad)
+    {
+        Call_StartForward(Core.OnPluginReady);
+        Call_Finish();
+        PrintToServer("Call");
+    }
 }
 
 public void OnConfigsExecuted()
