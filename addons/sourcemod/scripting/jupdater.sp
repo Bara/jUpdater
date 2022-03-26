@@ -23,6 +23,8 @@ enum struct Globals {
     Handle MySelf;
 
     GlobalForward OnPluginReady;
+
+    Handle UpdateTimer;
 }
 
 Globals Core;
@@ -66,7 +68,7 @@ public void OnPluginStart()
     g_aPlugins = new ArrayList(sizeof(PluginData));
     AddMySelfToArray();
 
-    CreateTimer(10800.0, Timer_CheckForUpdates, _, TIMER_REPEAT);
+    Core.UpdateTimer = CreateTimer(10800.0, Timer_CheckForUpdates, _, TIMER_REPEAT);
 
     RegAdminCmd("sm_listplugins", Command_ListPlugins, ADMFLAG_ROOT);
 }

@@ -23,6 +23,11 @@ native bool jUpdater_RegisterPlugin(const char[] url, const char[] baseURL);
  */
 native bool jUpdater_UnregisterPlugin();
 
+/**
+ * Force update check for all registered plugins
+ */
+native void jUpdater_ForceUpdateCheck();
+
 public SharedPlugin __pl_jupdater = 
 {
     name = "jupdater",
@@ -39,5 +44,6 @@ public void __pl_jupdater_SetNTVOptional()
 {
     MarkNativeAsOptional("jUpdater_RegisterPlugin");
     MarkNativeAsOptional("jUpdater_UnregisterPlugin");
+    MarkNativeAsOptional("jUpdater_ForceUpdateCheck");
 }
 #endif

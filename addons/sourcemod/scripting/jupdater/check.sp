@@ -6,7 +6,10 @@ public Action Timer_CheckForUpdates(Handle timer)
         return Plugin_Continue;
     }
 
-    PrintToServer("Checking for new plugin updates...");
+    if (Core.Debug.BoolValue)
+    {
+        PrintToServer("Checking for new plugin updates...");
+    }
 
     for (int i = 0; i < g_aPlugins.Length; i++)
     {

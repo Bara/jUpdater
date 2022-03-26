@@ -4,6 +4,7 @@ public APLRes AskPluginLoad2(Handle myself, bool late, char[] error, int err_max
 
     CreateNative("jUpdater_RegisterPlugin", Native_RegisterPlugin);
     CreateNative("jUpdater_UnregisterPlugin", Native_UnregisterPlugin);
+    CreateNative("jUpdater_ForceUpdateCheck", Native_ForceUpdateCheck);
 
     Core.LateLoad = late;
     Core.MySelf = myself;
@@ -72,4 +73,25 @@ public any Native_UnregisterPlugin(Handle plugin, int numParams)
     }
 
     return false;
+}
+
+public any Native_ForceUpdateCheck(Handle plugin, int numParams)
+{
+    PrintToServer("Forcing update check. Okay, I'll check for new updates...");
+
+    if (Core.UpdateTimer != null)
+    {
+        TriggerTimer(Core.UpdateTimer);
+    }
+    else
+    {
+        for (int i = 0; i < g_aPlugins.Length; i++)
+        {
+            PluginData tmp;
+            g_aPlugins.GetArray(i, tmp, sizeof(tmp));
+            
+            HTTPRequest request = new HTTPRequest(tmp.URL);
+            request.Get(GetPluginInformations, tmp.Plugin);
+        }
+    }
 }
