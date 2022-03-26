@@ -94,4 +94,6 @@ public any Native_ForceUpdateCheck(Handle plugin, int numParams)
             request.Get(GetPluginInformations, tmp.Plugin);
         }
     }
+
+    return true;
 }
