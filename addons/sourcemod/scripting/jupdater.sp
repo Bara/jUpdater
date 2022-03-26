@@ -15,6 +15,7 @@
 #define MAX_VERSION_LENGTH 32
 
 enum struct Globals {
+    ConVar UpdateCheckOnRegister;
     ConVar DiscordWebhook;
     ConVar Debug;
 
@@ -56,6 +57,7 @@ public void OnPluginStart()
     AutoExecConfig_SetCreateDirectory(true);
     AutoExecConfig_SetCreateFile(true);
     AutoExecConfig_SetFile("jupdater");
+    Core.UpdateCheckOnRegister = AutoExecConfig_CreateConVar("jupdater_update_check_on_register", "1", "Check for update on plugin register", _, true, 0.0, true, 1.0);
     Core.DiscordWebhook = AutoExecConfig_CreateConVar("jupdater_discord_webhook", "", "Set your discord webhook url if you want update notifications on discord", _, true, 0.0, true, 1.0);
     Core.Debug = AutoExecConfig_CreateConVar("jupdater_debug", "1", "Enable/Disable debug mode/messages", _, true, 0.0, true, 1.0);
     AutoExecConfig_ExecuteFile();

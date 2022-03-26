@@ -49,6 +49,12 @@ void AddPluginToArray(PluginData pdPlugin)
     {
         PrintToServer("Plugin \"%s\" (%d) was successfully registered.", pdPlugin.Name, index);
     }
+
+    if (Core.UpdateCheckOnRegister.BoolValue)
+    {
+        HTTPRequest request = new HTTPRequest(pdPlugin.URL);
+        request.Get(GetPluginInformations, pdPlugin.Plugin);
+    }
 }
 
 public any Native_UnregisterPlugin(Handle plugin, int numParams)
